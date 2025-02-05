@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartyCat</title>
+    <link rel="icon" href="catread.png" type="image/png">
+
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('page1et2.png'); /* Image de fond par défaut */
+            background-size: cover;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            transition: background-image 0.5s ease-in-out;
+        }
+
+        .container {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .start-container {
+            display: flex;
+            align-items: center;
+        }
+
+        img {
+            cursor: pointer;
+            width: 200px;
+            height: auto;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        img:hover {
+            transform: scale(1.1);
+        }
+
+        .button-container {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .button-container img {
+            margin: 0 10px;
+        }
+
+        .page {
+            display: none;
+            width: 100%;
+            max-width: 500px;
+            margin-top: 20px;
+            position: relative;
+            text-align: center;
+        }
+
+        .top-buttons {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .top-buttons img {
+            width: auto;
+            height: 50px; /* Hauteur fixe pour tous les boutons */
+            margin-left: 10px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .top-buttons img:hover {
+            transform: scale(1.1);
+        }
+
+        .input-field {
+            width: 80%;
+            max-width: 300px;
+            padding: 10px;
+            margin-bottom: 10px; /* Espacement ajouté */
+            border: 5px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        #logo {
+            width: 400px;
+            height: auto;
+            margin-bottom: 20px;
+            margin-right: 15px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="start-container">
+            <img id="logo" src="logosmartycat.png" alt="Logo SmartyCat">
+            <img id="startButton" src="START.png" alt="Start Button" onclick="showButtons()">
+        </div>
+
+        <div class="button-container" id="buttonContainer">
+            <img src="connexion.png" alt="Connexion Button" onclick="showPage('connexionPage', 'pageconnexion.png')">
+            <img src="nouveaucompte.png" alt="Nouveau Compte Button" onclick="showPage('nouveauComptePage', 'pagenouveaucompte.png')">
+        </div>
+
+        <!-- Page de Connexion -->
+        <div id="connexionPage" class="page">
+            <div class="top-buttons">
+                <img class="back-button" src="retour.png" alt="Retour" onclick="goBack()">
+                <img id="aideButton1" src="aide.png" alt="Aide" onclick="openAide()">
+                <img id="musiqueButton1" src="musique.png" alt="Musique" onclick="toggleMusic()">
+            </div>
+            <input type="text" class="input-field" placeholder="Nom d'utilisateur">
+            <input type="password" class="input-field" placeholder="Mot de passe">
+            <img src="meconnecter.png" alt="Me connecter">
+        </div>
+
+        <!-- Page de Création de Compte -->
+        <div id="nouveauComptePage" class="page">
+            <div class="top-buttons">
+                <img class="back-button" src="retour.png" alt="Retour" onclick="goBack()">
+                <img id="aideButton2" src="aide.png" alt="Aide" onclick="openAide()">
+                <img id="musiqueButton2" src="musique.png" alt="Musique" onclick="toggleMusic()">
+            </div>
+            <input type="text" class="input-field" placeholder="Nom d'utilisateur">
+            <input type="password" class="input-field" placeholder="Mot de passe">
+            <input type="password" class="input-field" placeholder="Confirme ton mot de passe">
+            <img src="creermoncompte.png" alt="Créer mon compte">
+        </div>
+
+    </div>
+
+    <div class="top-buttons" id="homeTopButtons">
+        <img id="aideButton3" src="aide.png" alt="Aide" onclick="openAide()">
+        <img id="musiqueButton3" src="musique.png" alt="Musique" onclick="toggleMusic()">
+    </div>
+
+    <!-- Élément audio pour la musique -->
+    <audio id="backgroundMusic" loop>
+        <source src="guitare.mp3" type="audio/mpeg">
+        Votre navigateur ne supporte pas l'élément audio.
+    </audio>
+
+    <script>
+        function showButtons() {
+            document.getElementById('startButton').style.display = 'none';
+            document.getElementById('buttonContainer').style.display = 'block';
+            document.getElementById('logo').style.display = 'none';
+            document.getElementById('homeTopButtons').style.display = 'none';
+        }
+
+        function showPage(pageId, backgroundImage) {
+            document.body.style.backgroundImage = `url('${backgroundImage}')`;
+            document.getElementById('connexionPage').style.display = 'none';
+            document.getElementById('nouveauComptePage').style.display = 'none';
+            document.getElementById('buttonContainer').style.display = 'none';
+            document.getElementById('logo').style.display = 'none';
+
+            document.getElementById(pageId).style.display = 'block';
+        }
+
+        function goBack() {
+            document.body.style.backgroundImage = 'url("page1et2.png")';
+            document.getElementById('connexionPage').style.display = 'none';
+            document.getElementById('nouveauComptePage').style.display = 'none';
+            document.getElementById('buttonContainer').style.display = 'block';
+            document.getElementById('logo').style.display = 'block';
+            document.getElementById('homeTopButtons').style.display = 'flex';
+        }
+
+        function openAide() {
+            window.open('aide.html', '_blank');
+        }
+
+        function toggleMusic() {
+            const music = document.getElementById('backgroundMusic');
+            if (music.paused) {
+                music.play();
+            } else {
+                music.pause();
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartyCat - Smart</title>
+    <link rel="icon" href="catread.png" type="image/png">
+
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #38B6FF; /* Couleur de fond */
+            font-family: Arial, sans-serif;
+            overflow-y: scroll; /* Ajoute une barre de défilement verticale */
+        }
+
+        .container {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .top-buttons {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .top-buttons img {
+            width: auto;
+            height: 50px; /* Hauteur fixe pour tous les boutons */
+            margin-left: 10px;
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+        }
+
+        .top-buttons img:hover {
+            transform: scale(1.1);
+        }
+
+        .center-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .center-content img {
+            width: 200px;
+            height: auto;
+            margin: 0 20px;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .center-content img:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="top-buttons">
+            <img id="aideButton" src="aide.png" alt="Aide" onclick="openAide()">
+            <img id="musiqueButton" src="musique.png" alt="Musique" onclick="toggleMusic()">
+        </div>
+
+        <div class="center-content">
+            <img id="ticketImage" src="ticket1.png" alt="Ticket">
+            <img id="apresButton" src="apres.png" alt="Après" onclick="changeTicket()">
+        </div>
+    </div>
+
+    <!-- Élément audio pour la musique -->
+    <audio id="backgroundMusic" loop>
+        <source src="guitare.mp3" type="audio/mpeg">
+        Votre navigateur ne supporte pas l'élément audio.
+    </audio>
+
+    <script>
+        function openAide() {
+            window.open('aide.html', '_blank');
+        }
+
+        function toggleMusic() {
+            const music = document.getElementById('backgroundMusic');
+            if (music.paused) {
+                music.play();
+            } else {
+                music.pause();
+            }
+        }
+
+        function changeTicket() {
+            const ticketImage = document.getElementById('ticketImage');
+            const randomNumber = Math.floor(Math.random() * 6) + 1;
+            ticketImage.src = `ticket${randomNumber}.png`;
+        }
+    </script>
+</body>
+</html>
