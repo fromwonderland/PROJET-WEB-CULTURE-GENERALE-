@@ -50,15 +50,72 @@
             align-items: center;
         }
 
-        .center-content img {
-            width: 200px;
+        .ticket-image {
+            width: 400px; /* Deux fois plus grande que le bouton apres.png */
             height: auto;
             margin: 0 20px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .ticket-image:hover {
+            transform: scale(1.1);
+        }
+
+        .apres-button, .avant-button {
+            width: auto;
+            height: 50px; /* Hauteur fixe pour les boutons */
             cursor: pointer;
             transition: transform 0.3s ease-in-out;
         }
 
-        .center-content img:hover {
+        .apres-button:hover, .avant-button:hover {
+            transform: scale(1.1);
+        }
+
+        .confirmation-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(56, 182, 255, 0.8); /* Fond semi-transparent */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .confirmation-content {
+            text-align: center;
+        }
+
+        .confirmation-content img {
+            width: auto;
+            height: 450px; /* Hauteur fixe pour l'image deconnexionquestion.png */
+            margin-bottom: 20px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .confirmation-content img:hover {
+            transform: scale(1.1);
+        }
+
+        .confirmation-buttons {
+            display: flex;
+            justify-content: center;
+        }
+
+        .confirmation-buttons img {
+            width: auto;
+            height: 50px; /* Hauteur fixe pour les boutons */
+            margin: 0 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .confirmation-buttons img:hover {
             transform: scale(1.1);
         }
     </style>
@@ -68,11 +125,23 @@
         <div class="top-buttons">
             <img id="aideButton" src="aide.png" alt="Aide" onclick="openAide()">
             <img id="musiqueButton" src="musique.png" alt="Musique" onclick="toggleMusic()">
+            <img id="deconnexionButton" class="deconnexion-button" src="deconnexion.png" alt="Déconnexion" onclick="showConfirmation()">
         </div>
 
         <div class="center-content">
-            <img id="ticketImage" src="ticket1.png" alt="Ticket">
-            <img id="apresButton" src="apres.png" alt="Après" onclick="changeTicket()">
+            <img id="avantButton" class="avant-button" src="avant.png" alt="Avant" onclick="previousTicket()">
+            <img id="ticketImage" class="ticket-image" src="ticket1.png" alt="Ticket">
+            <img id="apresButton" class="apres-button" src="apres.png" alt="Après" onclick="nextTicket()">
+        </div>
+    </div>
+
+    <div id="confirmationOverlay" class="confirmation-overlay">
+        <div class="confirmation-content">
+            <img src="deconnexionquestion.png" alt="Déconnexion Question">
+            <div class="confirmation-buttons">
+                <img src="oui.png" alt="Oui" onclick="confirmDeconnexion()">
+                <img src="non.png" alt="Non" onclick="hideConfirmation()">
+            </div>
         </div>
     </div>
 
@@ -83,6 +152,16 @@
     </audio>
 
     <script>
+        let currentTicketIndex = 0;
+        const ticketImages = [
+            'ticket1.png',
+            'ticket2.png',
+            'ticket3.png',
+            'ticket4.png',
+            'ticket5.png',
+            'ticket6.png'
+        ];
+
         function openAide() {
             window.open('aide.html', '_blank');
         }
@@ -96,10 +175,41 @@
             }
         }
 
-        function changeTicket() {
+        function nextTicket() {
+            currentTicketIndex = (currentTicketIndex + 1) % ticketImages.length;
+            updateTicketImage();
+        }
+
+        function previousTicket() {
+            if (currentTicketIndex > 0) {
+                currentTicketIndex = (currentTicketIndex - 1) % ticketImages.length;
+            }
+            updateTicketImage();
+        }
+
+        function updateTicketImage() {
             const ticketImage = document.getElementById('ticketImage');
-            const randomNumber = Math.floor(Math.random() * 6) + 1;
-            ticketImage.src = `ticket${randomNumber}.png`;
+            ticketImage.src = ticketImages[currentTicketIndex];
+        }
+
+        function showConfirmation() {
+            const overlay = document.getElementById('confirmationOverlay');
+            overlay.style.display = 'flex';
+            setTimeout(() => {
+                overlay.style.opacity = '1';
+            }, 10);
+        }
+
+        function hideConfirmation() {
+            const overlay = document.getElementById('confirmationOverlay');
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 500);
+        }
+
+        function confirmDeconnexion() {
+            window.location.href = 'index.html';
         }
     </script>
 </body>
