@@ -92,25 +92,6 @@
     .active {
       display: block;
     }
-    /* Bouton youtube.png dans l'angle supérieur droit */
-    .cat-button {
-      position: fixed;
-      top: 20px;    /* Positionne le bouton à 20px du haut */
-      right: 20px;  /* Positionne le bouton à 20px de la droite */
-      background: none;
-      border: none;
-      cursor: pointer;
-      z-index: 1100;
-      transition: transform 0.3s ease-in-out;
-    }
-    .cat-button img {
-      width: auto;  /* Taille initiale de l'image */
-      height: 50px;
-      transition: transform 0.3s ease-in-out;
-    }
-    .cat-button:hover img {
-      transform: scale(1.3); /* Agrandissement par 1.5 au survol */
-    }
   </style>
 </head>
 <body>
@@ -128,6 +109,7 @@
     <div class="tabs">
       <div class="tab" onclick="openTab(event, 'tab1')">Nouveau compte</div>
       <div class="tab" onclick="openTab(event, 'tab2')">Connexion</div>
+      <div class="tab" onclick="openTab(event, 'tab3')">Progression & Trophées</div>
     </div>
     <div id="tab1" class="tab-content active">
       <h1>⭐Nouveau compte⭐</h1>
@@ -137,12 +119,11 @@
       <h1>⭐Connexion⭐</h1>
       <p>Contenu du deuxième onglet.</p>
     </div>
+    <div id="tab3" class="tab-content">
+      <h1>⭐Trophées⭐</h1>
+      <p>Contenu du deuxième onglet.</p>
+    </div>
   </div>
-
-  <!-- Bouton YouTube -->
-  <button class="cat-button">
-    <img src="youtube.png" alt="YouTube">
-  </button>
 
   <script>
     function openTab(event, tabId) {
