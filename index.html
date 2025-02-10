@@ -74,6 +74,7 @@
             height: 50px; /* Hauteur fixe pour tous les boutons */
             margin-left: 10px;
             transition: transform 0.3s ease-in-out;
+            cursor: pointer;
         }
 
         .top-buttons img:hover {
@@ -98,6 +99,25 @@
             margin-right: 15px;
         }
 
+        .moon-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: auto;
+            height: 50px;
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+        }
+
+        .moon-button img {
+            width: auto;
+            height: 50px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .moon-button img:hover {
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body>
@@ -108,49 +128,48 @@
         </div>
 
         <div class="button-container" id="buttonContainer">
-            <img src="connexion.png" alt="Connexion Button" onclick="showPage('connexionPage', 'pageconnexion.png')">
-            <img src="nouveaucompte.png" alt="Nouveau Compte Button" onclick="showPage('nouveauComptePage', 'pagenouveaucompte.png')">
+            <img id="connexionButton" src="connexion.png" alt="Connexion Button" onclick="showPage('connexionPage', 'pageconnexion.png')">
+            <img id="nouveauCompteButton" src="nouveaucompte.png" alt="Nouveau Compte Button" onclick="showPage('nouveauComptePage', 'pagenouveaucompte.png')">
         </div>
 
         <!-- Page de Connexion -->
         <div id="connexionPage" class="page">
             <div class="top-buttons">
                 <img class="back-button" src="retour.png" alt="Retour" onclick="goBack()">
-                <img id="aideButton1" src="aide.png" alt="Aide" onclick="openAide()">
-                <img id="musiqueButton1" src="musique.png" alt="Musique" onclick="toggleMusic()">
+                <img src="aide.png" alt="Aide" onclick="openHelp()">
+                <img src="musique.png" alt="Musique" onclick="toggleMusic()">
             </div>
             <input type="text" class="input-field" placeholder="Nom d'utilisateur">
             <input type="password" class="input-field" placeholder="Mot de passe">
-            <img src="meconnecter.png" alt="Me connecter">
+            <img id="meconnecterButton" src="meconnecter.png" alt="Me connecter">
         </div>
 
         <!-- Page de Création de Compte -->
         <div id="nouveauComptePage" class="page">
             <div class="top-buttons">
                 <img class="back-button" src="retour.png" alt="Retour" onclick="goBack()">
-                <img id="aideButton2" src="aide.png" alt="Aide" onclick="openAide()">
-                <img id="musiqueButton2" src="musique.png" alt="Musique" onclick="toggleMusic()">
+                <img src="aide.png" alt="Aide" onclick="openHelp()">
+                <img src="musique.png" alt="Musique" onclick="toggleMusic()">
             </div>
             <input type="text" class="input-field" placeholder="Nom d'utilisateur">
             <input type="password" class="input-field" placeholder="Mot de passe">
             <input type="password" class="input-field" placeholder="Confirme ton mot de passe">
-            <img src="creermoncompte.png" alt="Créer mon compte">
+            <img id="creermoncompteButton" src="creermoncompte.png" alt="Créer mon compte">
         </div>
-
     </div>
 
     <div class="top-buttons" id="homeTopButtons">
-        <img id="aideButton3" src="aide.png" alt="Aide" onclick="openAide()">
-        <img id="musiqueButton3" src="musique.png" alt="Musique" onclick="toggleMusic()">
+        <img src="aide.png" alt="Aide" onclick="openHelp()">
+        <img src="musique.png" alt="Musique" onclick="toggleMusic()">
     </div>
 
-    <!-- Élément audio pour la musique -->
-    <audio id="backgroundMusic" loop>
-        <source src="guitare.mp3" type="audio/mpeg">
-        Votre navigateur ne supporte pas l'élément audio.
-    </audio>
+    <div class="moon-button" onclick="toggleDarkMode()">
+        <img src="moon.png" alt="Mode Nuit">
+    </div>
 
     <script>
+        let audio = new Audio('guitare.mp3');
+
         function showButtons() {
             document.getElementById('startButton').style.display = 'none';
             document.getElementById('buttonContainer').style.display = 'block';
@@ -159,6 +178,10 @@
         }
 
         function showPage(pageId, backgroundImage) {
+            const body = document.body;
+            if (body.classList.contains('dark-mode')) {
+                backgroundImage = backgroundImage.replace('.png', 'moon.png');
+            }
             document.body.style.backgroundImage = `url('${backgroundImage}')`;
             document.getElementById('connexionPage').style.display = 'none';
             document.getElementById('nouveauComptePage').style.display = 'none';
@@ -169,7 +192,12 @@
         }
 
         function goBack() {
-            document.body.style.backgroundImage = 'url("page1et2.png")';
+            const body = document.body;
+            if (body.classList.contains('dark-mode')) {
+                document.body.style.backgroundImage = 'url("page1et2moon.png")';
+            } else {
+                document.body.style.backgroundImage = 'url("page1et2.png")';
+            }
             document.getElementById('connexionPage').style.display = 'none';
             document.getElementById('nouveauComptePage').style.display = 'none';
             document.getElementById('buttonContainer').style.display = 'block';
@@ -177,18 +205,59 @@
             document.getElementById('homeTopButtons').style.display = 'flex';
         }
 
-        function openAide() {
+        function toggleDarkMode() {
+            const body = document.body;
+            const images = document.querySelectorAll('img');
+            if (body.classList.contains('dark-mode')) {
+                body.classList.remove('dark-mode');
+                if (document.getElementById('connexionPage').style.display === 'block') {
+                    body.style.backgroundImage = 'url("pageconnexion.png")';
+                } else if (document.getElementById('nouveauComptePage').style.display === 'block') {
+                    body.style.backgroundImage = 'url("pagenouveaucompte.png")';
+                } else {
+                    body.style.backgroundImage = 'url("page1et2.png")';
+                }
+                images.forEach(img => {
+                    if (!img.classList.contains('tooltip-img')) {
+                        img.src = img.src.replace('moon', '');
+                    }
+                });
+            } else {
+                body.classList.add('dark-mode');
+                if (document.getElementById('connexionPage').style.display === 'block') {
+                    body.style.backgroundImage = 'url("pageconnexionmoon.png")';
+                } else if (document.getElementById('nouveauComptePage').style.display === 'block') {
+                    body.style.backgroundImage = 'url("pagenouveaucomptemoon.png")';
+                } else {
+                    body.style.backgroundImage = 'url("page1et2moon.png")';
+                }
+                images.forEach(img => {
+                    if (!img.classList.contains('tooltip-img')) {
+                        img.src = img.src.replace('.png', 'moon.png');
+                    }
+                });
+            }
+        }
+
+        function openHelp() {
             window.open('aide.html', '_blank');
         }
 
         function toggleMusic() {
-            const music = document.getElementById('backgroundMusic');
-            if (music.paused) {
-                music.play();
+            if (audio.paused) {
+                audio.play();
             } else {
-                music.pause();
+                audio.pause();
             }
         }
+
+        document.getElementById('meconnecterButton').addEventListener('click', () => {
+            showPage('connexionPage', 'pageconnexion.png');
+        });
+
+        document.getElementById('creermoncompteButton').addEventListener('click', () => {
+            showPage('nouveauComptePage', 'pagenouveaucompte.png');
+        });
     </script>
 </body>
 </html>
