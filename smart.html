@@ -16,6 +16,7 @@
             background-color: #38B6FF; /* Couleur de fond */
             font-family: Arial, sans-serif;
             overflow-y: scroll; /* Ajoute une barre de défilement verticale */
+            transition: background-color 0.5s ease-in-out;
         }
 
         .container {
@@ -42,6 +43,26 @@
         }
 
         .top-buttons img:hover {
+            transform: scale(1.1);
+        }
+
+        .left-buttons {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .left-buttons img {
+            width: auto;
+            height: 50px; /* Hauteur fixe pour tous les boutons */
+            margin-right: 10px;
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+        }
+
+        .left-buttons img:hover {
             transform: scale(1.1);
         }
 
@@ -118,14 +139,152 @@
         .confirmation-buttons img:hover {
             transform: scale(1.1);
         }
+
+        .tooltip.light-mode {
+            position: absolute;
+            top: 70px; /* Positionne la bulle sous le bouton */
+            right: 20px; /* Aligne la bulle avec le bouton */
+            display: none;
+            background-color: #38B6FF; /* Même couleur de fond que le reste de la page en mode clair */
+            border: 2px solid #ab69c6; /* Cadre de couleur #ab69c6 */
+            border-radius: 10px; /* Angles arrondis */
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            margin: 2px; /* Espacement de 2px autour de la bulle */
+        }
+
+        .tooltip.light-mode img {
+            width: 50px;
+            height: 50px;
+            margin: 5px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .tooltip.light-mode img:hover {
+            transform: scale(1.1);
+        }
+
+        .tooltip-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 5 images par ligne */
+            gap: 10px;
+        }
+
+        .welcome-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(56, 182, 255, 0.8); /* Fond semi-transparent */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1002;
+        }
+
+        .welcome-overlay img {
+            width: auto;
+            height: 450px; /* Hauteur fixe pour l'image bienvenue.png */
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .welcome-overlay img:hover {
+            transform: scale(1.1);
+        }
+
+        .moon-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: auto;
+            height: 50px;
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+        }
+
+        .moon-button img {
+            width: auto;
+            height: 50px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .moon-button img:hover {
+            transform: scale(1.1);
+        }
+
+        /* Styles pour la nouvelle bulle de filtres */
+        .filters-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(56, 182, 255, 0.8); /* Fond flouté */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            display: none;
+        }
+
+        .filters-content {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 400px;
+            width: 100%;
+            text-align: left;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .filters-content img {
+            cursor: pointer;
+            width: auto;
+            height: 50px;
+        }
+
+        .filters-content .filter-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .filters-content .filter-option input {
+            margin-right: 10px;
+        }
+
+        .filters-content button {
+            background-color: #38B6FF;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        .filters-content button:hover {
+            background-color: #2a9fd6;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="top-buttons">
+            <img id="progressionButton" src="progression.png" alt="Progression" onclick="progressionFunction()">
+            <img id="tropheeButton" src="trophee.png" alt="Trophée" onclick="tropheeFunction()">
             <img id="aideButton" src="aide.png" alt="Aide" onclick="openAide()">
             <img id="musiqueButton" src="musique.png" alt="Musique" onclick="toggleMusic()">
             <img id="deconnexionButton" class="deconnexion-button" src="deconnexion.png" alt="Déconnexion" onclick="showConfirmation()">
+        </div>
+
+        <div class="left-buttons">
+            <img id="apprendreButton" src="apprendre.png" alt="Apprendre" onclick="apprendreFunction()">
+            <img id="mentrainerButton" src="mentrainer.png" alt="M'entraîner" onclick="mentrainerFunction()">
+            <img id="filtresButton" src="filtres.png" alt="Filtres" onclick="showFilters()">
         </div>
 
         <div class="center-content">
@@ -145,11 +304,67 @@
         </div>
     </div>
 
+    <div id="tooltip" class="tooltip light-mode">
+        <div class="tooltip-grid">
+            <img src="trophee1.png" alt="Trophée 1">
+            <img src="trophee2.png" alt="Trophée 2">
+            <img src="trophee3.png" alt="Trophée 3">
+            <img src="trophee4.png" alt="Trophée 4">
+            <img src="trophee5.png" alt="Trophée 5">
+            <img src="trophee6.png" alt="Trophée 6">
+            <img src="trophee7.png" alt="Trophée 7">
+            <img src="trophee8.png" alt="Trophée 8">
+            <img src="trophee9.png" alt="Trophée 9">
+            <img src="trophee10.png" alt="Trophée 10">
+        </div>
+    </div>
+
+    <div id="welcomeOverlay" class="welcome-overlay">
+        <img src="bienvenue.png" alt="Bienvenue">
+    </div>
+
+    <div class="moon-button" onclick="toggleDarkMode()">
+        <img src="moon.png" alt="Mode Nuit">
+    </div>
+
     <!-- Élément audio pour la musique -->
     <audio id="backgroundMusic" loop>
         <source src="guitare.mp3" type="audio/mpeg">
         Votre navigateur ne supporte pas l'élément audio.
     </audio>
+
+    <!-- Nouvelle Bulle de filtres -->
+    <div id="filtersOverlay" class="filters-overlay">
+        <div class="filters-content">
+            <img src="retour.png" alt="Retour" onclick="hideFilters()" style="position: absolute; top: 10px; right: 10px;">
+            <h3>Sélectionnez vos thèmes</h3>
+            <div class="filter-option">
+                <input type="checkbox" id="histoire" checked>
+                <label for="histoire">Histoire & Géographie 🌍</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="arts">
+                <label for="arts">Arts & Littérature 🎭</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="sciences">
+                <label for="sciences">Sciences & Technologie 🔬</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="musique">
+                <label for="musique">Musique & Culture Pop 🎵</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="sports">
+                <label for="sports">Sports & Records ⚽</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="viequotidienne">
+                <label for="viequotidienne">Vie quotidienne & Insolite 🍔</label>
+            </div>
+            <button onclick="saveFilters()">Enregistrer</button>
+        </div>
+    </div>
 
     <script>
         let currentTicketIndex = 0;
@@ -159,7 +374,15 @@
             'ticket3.png',
             'ticket4.png',
             'ticket5.png',
-            'ticket6.png'
+            'ticket6.png',
+            'ticket7.png',
+            'ticket8.png',
+            'ticket9.png',
+            'ticket10.png',
+            'ticket11.png',
+            'ticket12.png',
+            'ticket13.png',
+            'ticket14.png'
         ];
 
         function openAide() {
@@ -183,6 +406,8 @@
         function previousTicket() {
             if (currentTicketIndex > 0) {
                 currentTicketIndex = (currentTicketIndex - 1) % ticketImages.length;
+            } else {
+                currentTicketIndex = ticketImages.length - 1;
             }
             updateTicketImage();
         }
@@ -210,6 +435,103 @@
 
         function confirmDeconnexion() {
             window.location.href = 'index.html';
+        }
+
+        function apprendreFunction() {
+            // Fonction à définir plus tard
+            alert("Fonctionnalité 'Apprendre' à définir.");
+        }
+
+        function mentrainerFunction() {
+            // Fonction à définir plus tard
+            alert("Fonctionnalité 'M'entraîner' à définir.");
+        }
+
+        function tropheeFunction() {
+            // Fonction à définir plus tard
+            alert("Fonctionnalité 'Trophée' à définir.");
+        }
+
+        function progressionFunction() {
+            // Fonction à définir plus tard
+            alert("Fonctionnalité 'Progression' à définir.");
+        }
+
+        const tropheeButton = document.getElementById('tropheeButton');
+        const tooltip = document.getElementById('tooltip');
+
+        function showTooltip() {
+            tooltip.style.display = 'block';
+        }
+
+        function hideTooltip() {
+            tooltip.style.display = 'none';
+        }
+
+        tropheeButton.addEventListener('mouseenter', showTooltip);
+        tropheeButton.addEventListener('mouseleave', hideTooltip);
+        tooltip.addEventListener('mouseenter', showTooltip);
+        tooltip.addEventListener('mouseleave', hideTooltip);
+
+        const welcomeOverlay = document.getElementById('welcomeOverlay');
+
+        window.addEventListener('load', () => {
+            welcomeOverlay.style.display = 'flex';
+        });
+
+        window.addEventListener('click', () => {
+            welcomeOverlay.style.display = 'none';
+        });
+
+        function toggleDarkMode() {
+            const body = document.body;
+            const images = document.querySelectorAll('img:not(.tooltip img)'); // Exclure les images dans le tooltip
+            if (body.classList.contains('dark-mode')) {
+                body.classList.remove('dark-mode');
+                body.style.backgroundColor = '#38B6FF';
+                images.forEach(img => {
+                    img.src = img.src.replace('moon', '');
+                });
+                ticketImages.forEach((ticket, index) => {
+                    ticketImages[index] = ticket.replace('moon', '');
+                });
+                updateTicketImage();
+            } else {
+                body.classList.add('dark-mode');
+                body.style.backgroundColor = '#060035';
+                images.forEach(img => {
+                    img.src = img.src.replace('.png', 'moon.png');
+                });
+                ticketImages.forEach((ticket, index) => {
+                    ticketImages[index] = ticket.replace('.png', 'moon.png');
+                });
+                updateTicketImage();
+            }
+        }
+
+        // Afficher les filtres
+        function showFilters() {
+            const filtersOverlay = document.getElementById('filtersOverlay');
+            filtersOverlay.style.display = 'flex';
+        }
+
+        // Masquer les filtres
+        function hideFilters() {
+            const filtersOverlay = document.getElementById('filtersOverlay');
+            filtersOverlay.style.display = 'none';
+        }
+
+        // Sauvegarder les filtres sélectionnés
+        function saveFilters() {
+            const histoire = document.getElementById('histoire').checked;
+            const arts = document.getElementById('arts').checked;
+            const sciences = document.getElementById('sciences').checked;
+            const musique = document.getElementById('musique').checked;
+            const sports = document.getElementById('sports').checked;
+            const viequotidienne = document.getElementById('viequotidienne').checked;
+
+            console.log(`Histoire: ${histoire}, Arts: ${arts}, Sciences: ${sciences}, Musique: ${musique}, Sports: ${sports}, Vie Quotidienne: ${viequotidienne}`);
+            hideFilters(); // Masquer la bulle après avoir enregistré les filtres
         }
     </script>
 </body>
