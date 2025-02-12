@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SmartyCat</title>
     <link rel="icon" href="catread.png" type="image/png">
-
     <style>
         body {
             display: flex;
@@ -139,9 +138,9 @@
                 <img src="aide.png" alt="Aide" onclick="openHelp()">
                 <img src="musique.png" alt="Musique" onclick="toggleMusic()">
             </div>
-            <input type="text" class="input-field" placeholder="Nom d'utilisateur">
-            <input type="password" class="input-field" placeholder="Mot de passe">
-            <img id="meconnecterButton" src="meconnecter.png" alt="Me connecter">
+            <input type="text" id="loginUsername" class="input-field" placeholder="Nom d'utilisateur">
+            <input type="password" id="loginPassword" class="input-field" placeholder="Mot de passe">
+            <img id="meconnecterButton" src="meconnecter.png" alt="Me connecter" onclick="login()">
         </div>
 
         <!-- Page de Création de Compte -->
@@ -151,10 +150,10 @@
                 <img src="aide.png" alt="Aide" onclick="openHelp()">
                 <img src="musique.png" alt="Musique" onclick="toggleMusic()">
             </div>
-            <input type="text" class="input-field" placeholder="Nom d'utilisateur">
-            <input type="password" class="input-field" placeholder="Mot de passe">
-            <input type="password" class="input-field" placeholder="Confirme ton mot de passe">
-            <img id="creermoncompteButton" src="creermoncompte.png" alt="Créer mon compte">
+            <input type="text" id="newUsername" class="input-field" placeholder="Nom d'utilisateur">
+            <input type="password" id="newPassword" class="input-field" placeholder="Mot de passe">
+            <input type="password" id="confirmPassword" class="input-field" placeholder="Confirme ton mot de passe">
+            <img id="creermoncompteButton" src="creermoncompte.png" alt="Créer mon compte" onclick="createAccount()">
         </div>
     </div>
 
@@ -251,13 +250,52 @@
             }
         }
 
-        document.getElementById('meconnecterButton').addEventListener('click', () => {
-            showPage('connexionPage', 'pageconnexion.png');
-        });
+        async function createAccount() {
+            const username = document.getElementById('newUsername').value.trim();
+            const password = document.getElementById('newPassword').value.trim();
+            const confirmPassword = document.getElementById('confirmPassword').value.trim();
 
-        document.getElementById('creermoncompteButton').addEventListener('click', () => {
-            showPage('nouveauComptePage', 'pagenouveaucompte.png');
-        });
+            if (password !== confirmPassword) {
+                alert("Les mots de passe ne correspondent pas.");
+                return;
+            }
+
+            const response = await fetch('logins.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ action: 'register', username, password })
+            });
+
+            const result = await response.json();
+            if (result.status === 'success') {
+                alert("Compte créé avec succès!");
+                goBack();
+            } else {
+                alert(result.message);
+            }
+        }
+
+        async function login() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+
+            const response = await fetch('logins.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ action: 'login', username, password })
+            });
+
+            const result = await response.json();
+            if (result.status === 'success') {
+                window.location.href = 'smart.html';
+            } else {
+                alert(result.message);
+            }
+        }
     </script>
 </body>
 </html>
