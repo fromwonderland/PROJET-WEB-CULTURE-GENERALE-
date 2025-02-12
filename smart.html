@@ -35,7 +35,7 @@
 
         .top-buttons img {
             width: auto;
-            height: 50px; /* Hauteur fixe pour tous les boutons */
+            height: 65px; /* Hauteur fixe pour tous les boutons */
             margin-left: 10px;
             transition: transform 0.3s ease-in-out;
             cursor: pointer;
@@ -55,7 +55,7 @@
 
         .left-buttons img {
             width: auto;
-            height: 50px; /* Hauteur fixe pour tous les boutons */
+            height: 70px; /* Hauteur fixe pour tous les boutons */
             margin-right: 10px;
             transition: transform 0.3s ease-in-out;
             cursor: pointer;
@@ -75,7 +75,7 @@
         .ticket-image {
             width: 400px; /* Deux fois plus grande que le bouton apres.png */
             height: auto;
-            margin: 20px 0;
+            margin: 150px 0;
             transition: transform 0.3s ease-in-out;
         }
 
@@ -94,11 +94,11 @@
         }
 
         .avant-button {
-            left: -60px; /* Position à gauche de l'image */
+            left: -100px; /* Position à gauche de l'image */
         }
 
         .apres-button {
-            right: -60px; /* Position à droite de l'image */
+            right: -100px; /* Position à droite de l'image */
         }
 
         .apres-button:hover, .avant-button:hover {
@@ -272,6 +272,8 @@
             height: 50px;
             transition: transform 0.3s ease-in-out;
             cursor: pointer;
+            display: block; /* Ajouté pour centrer l'image */
+            margin: 20px auto 0 auto; /* Centre l'image horizontalement et ajuste la marge */
         }
 
         .filters-content img.enregistrer:hover {
@@ -390,202 +392,226 @@
         </div>
     </div>
 
-    <script>
-        let currentTicketIndex = 0;
-        const ticketImages = [
-            'ticket1.png',
-            'ticket2.png',
-            'ticket3.png',
-            'ticket4.png',
-            'ticket5.png',
-            'ticket6.png',
-            'ticket7.png',
-            'ticket8.png',
-            'ticket9.png',
-            'ticket10.png',
-            'ticket11.png',
-            'ticket12.png',
-            'ticket13.png',
-            'ticket14.png'
-        ];
+<script>
+    let currentTicketIndex = 0;
 
-        let quotesData = {};
-        let selectedFilters = ['histoire']; // "Histoire & Géographie" est sélectionné par défaut
+    function openAide() {
+        window.open('aide.html', '_blank');
+    }
 
-        async function loadQuotes() {
-            try {
-                const response = await fetch('quotes.json');
-                quotesData = await response.json();
-                displayRandomQuote();
-            } catch (error) {
-                console.error('Erreur lors du chargement des quotes:', error);
-            }
-        }
+    const ticketImages = [
+        'ticket1.png',
+        'ticket2.png',
+        'ticket3.png',
+        'ticket4.png',
+        'ticket5.png',
+        'ticket6.png',
+        'ticket7.png',
+        'ticket8.png',
+        'ticket9.png',
+        'ticket10.png',
+        'ticket11.png',
+        'ticket12.png',
+        'ticket13.png',
+        'ticket14.png'
+    ];
 
-        function displayRandomQuote() {
-            const quoteContainer = document.getElementById('quoteContainer');
-            if (!quotesData || !quotesData.quotes) {
-                quoteContainer.textContent = "Erreur de chargement des citations.";
-                return;
-            }
+    let quotesData = {};
+    let selectedFilters = ['histoire']; // "Histoire & Géographie" est sélectionné par défaut
 
-            let availableQuotes = [];
-            selectedFilters.forEach(filter => {
-                if (quotesData.quotes[filter]) {
-                    availableQuotes = availableQuotes.concat(quotesData.quotes[filter]);
-                }
-            });
-
-            if (availableQuotes.length > 0) {
-                const randomQuote = availableQuotes[Math.floor(Math.random() * availableQuotes.length)];
-                quoteContainer.textContent = randomQuote;
-            } else {
-                quoteContainer.textContent = "Aucune citation disponible pour les filtres sélectionnés.";
-            }
-        }
-
-        function nextTicket() {
-            currentTicketIndex = (currentTicketIndex + 1) % ticketImages.length;
-            updateTicketImage();
+    async function loadQuotes() {
+        try {
+            const response = await fetch('quotes.json');
+            quotesData = await response.json();
             displayRandomQuote();
+        } catch (error) {
+            console.error('Erreur lors du chargement des quotes:', error);
+        }
+    }
+
+    function displayRandomQuote() {
+        const quoteContainer = document.getElementById('quoteContainer');
+        if (!quotesData || !quotesData.quotes) {
+            quoteContainer.textContent = "Erreur de chargement des citations.";
+            return;
         }
 
-        function previousTicket() {
-            if (currentTicketIndex > 0) {
-                currentTicketIndex = (currentTicketIndex - 1) % ticketImages.length;
-            } else {
-                currentTicketIndex = ticketImages.length - 1;
+        let availableQuotes = [];
+        selectedFilters.forEach(filter => {
+            if (quotesData.quotes[filter]) {
+                availableQuotes = availableQuotes.concat(quotesData.quotes[filter]);
             }
-            updateTicketImage();
-            displayRandomQuote();
-        }
-
-        function updateTicketImage() {
-            const ticketImage = document.getElementById('ticketImage');
-            ticketImage.src = ticketImages[currentTicketIndex];
-        }
-
-        function showConfirmation() {
-            const overlay = document.getElementById('confirmationOverlay');
-            const quoteContainer = document.getElementById('quoteContainer');
-            quoteContainer.classList.add('hidden');
-            overlay.style.display = 'flex';
-            setTimeout(() => {
-                overlay.style.opacity = '1';
-            }, 10);
-        }
-
-        function hideConfirmation() {
-            const overlay = document.getElementById('confirmationOverlay');
-            const quoteContainer = document.getElementById('quoteContainer');
-            overlay.style.opacity = '0';
-            setTimeout(() => {
-                overlay.style.display = 'none';
-                quoteContainer.classList.remove('hidden');
-            }, 500);
-        }
-
-        function confirmDeconnexion() {
-            window.location.href = 'index.html';
-        }
-
-        function apprendreFunction() {
-            // Fonction à définir plus tard
-            alert("Fonctionnalité 'Apprendre' à définir.");
-        }
-
-        function mentrainerFunction() {
-            // Fonction à définir plus tard
-            alert("Fonctionnalité 'M'entraîner' à définir.");
-        }
-
-        function tropheeFunction() {
-            // Fonction à définir plus tard
-            alert("Fonctionnalité 'Trophée' à définir.");
-        }
-
-        function progressionFunction() {
-            // Fonction à définir plus tard
-            alert("Fonctionnalité 'Progression' à définir.");
-        }
-
-        const tropheeButton = document.getElementById('tropheeButton');
-        const tooltip = document.getElementById('tooltip');
-
-        function showTooltip() {
-            tooltip.style.display = 'block';
-        }
-
-        function hideTooltip() {
-            tooltip.style.display = 'none';
-        }
-
-        tropheeButton.addEventListener('mouseenter', showTooltip);
-        tropheeButton.addEventListener('mouseleave', hideTooltip);
-        tooltip.addEventListener('mouseenter', showTooltip);
-        tooltip.addEventListener('mouseleave', hideTooltip);
-
-        const welcomeOverlay = document.getElementById('welcomeOverlay');
-
-        window.addEventListener('load', () => {
-            welcomeOverlay.style.display = 'flex';
-            loadQuotes();
         });
 
-        window.addEventListener('click', () => {
-            const quoteContainer = document.getElementById('quoteContainer');
-            welcomeOverlay.style.display = 'none';
+        if (availableQuotes.length > 0) {
+            const randomQuote = availableQuotes[Math.floor(Math.random() * availableQuotes.length)];
+            quoteContainer.textContent = randomQuote;
+        } else {
+            quoteContainer.textContent = "Aucune citation disponible pour les filtres sélectionnés.";
+        }
+    }
+
+    function nextTicket() {
+        currentTicketIndex = (currentTicketIndex + 1) % ticketImages.length;
+        updateTicketImage();
+        displayRandomQuote();
+    }
+
+    function previousTicket() {
+        if (currentTicketIndex > 0) {
+            currentTicketIndex = (currentTicketIndex - 1) % ticketImages.length;
+        } else {
+            currentTicketIndex = ticketImages.length - 1;
+        }
+        updateTicketImage();
+        displayRandomQuote();
+    }
+
+    function updateTicketImage() {
+        const ticketImage = document.getElementById('ticketImage');
+        ticketImage.src = ticketImages[currentTicketIndex];
+    }
+
+    // Fonction pour afficher l'overlay de confirmation (déconnexion)
+    // Fonction pour afficher l'overlay de confirmation (déconnexion)
+    function showConfirmation() {
+        const overlay = document.getElementById('confirmationOverlay');
+        const quoteContainer = document.getElementById('quoteContainer');
+        
+        // Masquer la citation quand l'overlay de confirmation apparaît
+        quoteContainer.style.display = 'none';
+        
+        overlay.style.display = 'flex';
+        setTimeout(() => {
+            overlay.style.opacity = '1';
+        }, 10);
+    }
+
+    // Fonction pour masquer l'overlay de confirmation (déconnexion)
+    function hideConfirmation() {
+        const overlay = document.getElementById('confirmationOverlay');
+        const quoteContainer = document.getElementById('quoteContainer');
+        
+        overlay.style.opacity = '0';
+        setTimeout(() => {
+            overlay.style.display = 'none';
+            // Réafficher la citation après la fermeture de l'overlay
+            quoteContainer.style.display = 'block';
+        }, 500);
+    }
+
+    // Fonction pour masquer l'overlay de confirmation (déconnexion)
+    function hideConfirmation() {
+        const overlay = document.getElementById('confirmationOverlay');
+        const quoteContainer = document.getElementById('quoteContainer');
+        
+        overlay.style.opacity = '0';
+        setTimeout(() => {
+            overlay.style.display = 'none';
+            // Réafficher la citation après la fermeture de l'overlay
             quoteContainer.classList.remove('hidden');
-        });
+        }, 500);
+    }
 
-        function toggleDarkMode() {
-            const body = document.body;
-            const images = document.querySelectorAll('img:not(.tooltip img)'); // Exclure les images dans le tooltip
-            if (body.classList.contains('dark-mode')) {
-                body.classList.remove('dark-mode');
-                body.style.backgroundColor = '#38B6FF';
-                images.forEach(img => {
-                    img.src = img.src.replace('moon', '');
-                });
-                ticketImages.forEach((ticket, index) => {
-                    ticketImages[index] = ticket.replace('moon', '');
-                });
-                updateTicketImage();
-            } else {
-                body.classList.add('dark-mode');
-                body.style.backgroundColor = '#060035';
-                images.forEach(img => {
-                    img.src = img.src.replace('.png', 'moon.png');
-                });
-                ticketImages.forEach((ticket, index) => {
-                    ticketImages[index] = ticket.replace('.png', 'moon.png');
-                });
-                updateTicketImage();
-            }
+    function confirmDeconnexion() {
+        window.location.href = 'index.html';
+    }
+
+    function apprendreFunction() {
+        alert("Fonctionnalité 'Apprendre' à définir.");
+    }
+
+    function mentrainerFunction() {
+        alert("Fonctionnalité 'M'entraîner' à définir.");
+    }
+
+    function tropheeFunction() {
+        alert("Fonctionnalité 'Trophée' à définir.");
+    }
+
+    function progressionFunction() {
+        alert("Fonctionnalité 'Progression' à définir.");
+    }
+
+    const tropheeButton = document.getElementById('tropheeButton');
+    const tooltip = document.getElementById('tooltip');
+
+    function showTooltip() {
+        tooltip.style.display = 'block';
+    }
+
+    function hideTooltip() {
+        tooltip.style.display = 'none';
+    }
+
+    tropheeButton.addEventListener('mouseenter', showTooltip);
+    tropheeButton.addEventListener('mouseleave', hideTooltip);
+    tooltip.addEventListener('mouseenter', showTooltip);
+    tooltip.addEventListener('mouseleave', hideTooltip);
+
+    const welcomeOverlay = document.getElementById('welcomeOverlay');
+    const quoteContainer = document.getElementById('quoteContainer');
+
+    window.addEventListener('load', () => {
+        welcomeOverlay.style.display = 'flex';
+        quoteContainer.classList.add('hidden');
+        loadQuotes();
+    });
+
+    window.addEventListener('click', () => {
+        welcomeOverlay.style.display = 'none';
+        quoteContainer.classList.remove('hidden');
+    });
+
+    function toggleDarkMode() {
+        const body = document.body;
+        const images = document.querySelectorAll('img:not(.tooltip img)');
+        if (body.classList.contains('dark-mode')) {
+            body.classList.remove('dark-mode');
+            body.style.backgroundColor = '#38B6FF';
+            images.forEach(img => {
+                img.src = img.src.replace('moon', '');
+            });
+            ticketImages.forEach((ticket, index) => {
+                ticketImages[index] = ticket.replace('moon', '');
+            });
+            updateTicketImage();
+        } else {
+            body.classList.add('dark-mode');
+            body.style.backgroundColor = '#060035';
+            images.forEach(img => {
+                img.src = img.src.replace('.png', 'moon.png');
+            });
+            ticketImages.forEach((ticket, index) => {
+                ticketImages[index] = ticket.replace('.png', 'moon.png');
+            });
+            updateTicketImage();
         }
+    }
 
-        function showFilters() {
-            const filtersOverlay = document.getElementById('filtersOverlay');
-            filtersOverlay.style.display = 'flex';
-        }
+    function showFilters() {
+        const filtersOverlay = document.getElementById('filtersOverlay');
+        filtersOverlay.style.display = 'flex';
+    }
 
-        function hideFilters() {
-            const filtersOverlay = document.getElementById('filtersOverlay');
-            filtersOverlay.style.display = 'none';
-        }
+    function hideFilters() {
+        const filtersOverlay = document.getElementById('filtersOverlay');
+        filtersOverlay.style.display = 'none';
+    }
 
-        function saveFilters() {
-            selectedFilters = [];
-            if (document.getElementById('histoire').checked) selectedFilters.push('histoire');
-            if (document.getElementById('arts').checked) selectedFilters.push('arts');
-            if (document.getElementById('sciences').checked) selectedFilters.push('sciences');
-            if (document.getElementById('musique').checked) selectedFilters.push('musique');
-            if (document.getElementById('sports').checked) selectedFilters.push('sports');
-            if (document.getElementById('viequotidienne').checked) selectedFilters.push('viequotidienne');
+    function saveFilters() {
+        selectedFilters = [];
+        if (document.getElementById('histoire').checked) selectedFilters.push('histoire');
+        if (document.getElementById('arts').checked) selectedFilters.push('arts');
+        if (document.getElementById('sciences').checked) selectedFilters.push('sciences');
+        if (document.getElementById('musique').checked) selectedFilters.push('musique');
+        if (document.getElementById('sports').checked) selectedFilters.push('sports');
+        if (document.getElementById('viequotidienne').checked) selectedFilters.push('viequotidienne');
 
-            hideFilters();
-            displayRandomQuote();
-        }
-    </script>
+        hideFilters();
+        displayRandomQuote();
+    }
+</script>
+
 </body>
 </html>
