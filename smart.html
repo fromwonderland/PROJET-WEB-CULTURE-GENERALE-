@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SmartyCat - Smart</title>
     <link rel="icon" href="catread.png" type="image/png">
-
     <style>
         body {
             display: flex;
@@ -69,12 +68,14 @@
         .center-content {
             display: flex;
             align-items: center;
+            flex-direction: column;
+            position: relative;
         }
 
         .ticket-image {
             width: 400px; /* Deux fois plus grande que le bouton apres.png */
             height: auto;
-            margin: 0 20px;
+            margin: 20px 0;
             transition: transform 0.3s ease-in-out;
         }
 
@@ -87,10 +88,21 @@
             height: 50px; /* Hauteur fixe pour les boutons */
             cursor: pointer;
             transition: transform 0.3s ease-in-out;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .avant-button {
+            left: -60px; /* Position à gauche de l'image */
+        }
+
+        .apres-button {
+            right: -60px; /* Position à droite de l'image */
         }
 
         .apres-button:hover, .avant-button:hover {
-            transform: scale(1.1);
+            transform: translateY(-50%) scale(1.1);
         }
 
         .confirmation-overlay {
@@ -255,19 +267,32 @@
             margin-right: 10px;
         }
 
-        .filters-content button {
-            background-color: #38B6FF;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
+        .filters-content img.enregistrer {
+            width: auto;
+            height: 50px;
+            transition: transform 0.3s ease-in-out;
             cursor: pointer;
-            width: 100%;
-            font-size: 16px;
         }
 
-        .filters-content button:hover {
-            background-color: #2a9fd6;
+        .filters-content img.enregistrer:hover {
+            transform: scale(1.1);
+        }
+
+        #quoteContainer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5em;
+            color: black;
+            background: none;
+            z-index: 1003;
+            white-space: pre-wrap;
+            text-align: center;
+        }
+
+        .hidden {
+            display: none;
         }
     </style>
 </head>
@@ -288,6 +313,7 @@
         </div>
 
         <div class="center-content">
+            <div id="quoteContainer"></div>
             <img id="avantButton" class="avant-button" src="avant.png" alt="Avant" onclick="previousTicket()">
             <img id="ticketImage" class="ticket-image" src="ticket1.png" alt="Ticket">
             <img id="apresButton" class="apres-button" src="apres.png" alt="Après" onclick="nextTicket()">
@@ -327,13 +353,11 @@
         <img src="moon.png" alt="Mode Nuit">
     </div>
 
-    <!-- Élément audio pour la musique -->
     <audio id="backgroundMusic" loop>
         <source src="guitare.mp3" type="audio/mpeg">
         Votre navigateur ne supporte pas l'élément audio.
     </audio>
 
-    <!-- Nouvelle Bulle de filtres -->
     <div id="filtersOverlay" class="filters-overlay">
         <div class="filters-content">
             <img src="retour.png" alt="Retour" onclick="hideFilters()" style="position: absolute; top: 10px; right: 10px;">
@@ -362,7 +386,7 @@
                 <input type="checkbox" id="viequotidienne">
                 <label for="viequotidienne">Vie quotidienne & Insolite 🍔</label>
             </div>
-            <button onclick="saveFilters()">Enregistrer</button>
+            <img class="enregistrer" src="enregistrer.png" alt="Enregistrer" onclick="saveFilters()">
         </div>
     </div>
 
@@ -385,22 +409,45 @@
             'ticket14.png'
         ];
 
-        function openAide() {
-            window.open('aide.html', '_blank');
+        let quotesData = {};
+        let selectedFilters = ['histoire']; // "Histoire & Géographie" est sélectionné par défaut
+
+        async function loadQuotes() {
+            try {
+                const response = await fetch('quotes.json');
+                quotesData = await response.json();
+                displayRandomQuote();
+            } catch (error) {
+                console.error('Erreur lors du chargement des quotes:', error);
+            }
         }
 
-        function toggleMusic() {
-            const music = document.getElementById('backgroundMusic');
-            if (music.paused) {
-                music.play();
+        function displayRandomQuote() {
+            const quoteContainer = document.getElementById('quoteContainer');
+            if (!quotesData || !quotesData.quotes) {
+                quoteContainer.textContent = "Erreur de chargement des citations.";
+                return;
+            }
+
+            let availableQuotes = [];
+            selectedFilters.forEach(filter => {
+                if (quotesData.quotes[filter]) {
+                    availableQuotes = availableQuotes.concat(quotesData.quotes[filter]);
+                }
+            });
+
+            if (availableQuotes.length > 0) {
+                const randomQuote = availableQuotes[Math.floor(Math.random() * availableQuotes.length)];
+                quoteContainer.textContent = randomQuote;
             } else {
-                music.pause();
+                quoteContainer.textContent = "Aucune citation disponible pour les filtres sélectionnés.";
             }
         }
 
         function nextTicket() {
             currentTicketIndex = (currentTicketIndex + 1) % ticketImages.length;
             updateTicketImage();
+            displayRandomQuote();
         }
 
         function previousTicket() {
@@ -410,6 +457,7 @@
                 currentTicketIndex = ticketImages.length - 1;
             }
             updateTicketImage();
+            displayRandomQuote();
         }
 
         function updateTicketImage() {
@@ -419,6 +467,8 @@
 
         function showConfirmation() {
             const overlay = document.getElementById('confirmationOverlay');
+            const quoteContainer = document.getElementById('quoteContainer');
+            quoteContainer.classList.add('hidden');
             overlay.style.display = 'flex';
             setTimeout(() => {
                 overlay.style.opacity = '1';
@@ -427,9 +477,11 @@
 
         function hideConfirmation() {
             const overlay = document.getElementById('confirmationOverlay');
+            const quoteContainer = document.getElementById('quoteContainer');
             overlay.style.opacity = '0';
             setTimeout(() => {
                 overlay.style.display = 'none';
+                quoteContainer.classList.remove('hidden');
             }, 500);
         }
 
@@ -477,10 +529,13 @@
 
         window.addEventListener('load', () => {
             welcomeOverlay.style.display = 'flex';
+            loadQuotes();
         });
 
         window.addEventListener('click', () => {
+            const quoteContainer = document.getElementById('quoteContainer');
             welcomeOverlay.style.display = 'none';
+            quoteContainer.classList.remove('hidden');
         });
 
         function toggleDarkMode() {
@@ -509,29 +564,27 @@
             }
         }
 
-        // Afficher les filtres
         function showFilters() {
             const filtersOverlay = document.getElementById('filtersOverlay');
             filtersOverlay.style.display = 'flex';
         }
 
-        // Masquer les filtres
         function hideFilters() {
             const filtersOverlay = document.getElementById('filtersOverlay');
             filtersOverlay.style.display = 'none';
         }
 
-        // Sauvegarder les filtres sélectionnés
         function saveFilters() {
-            const histoire = document.getElementById('histoire').checked;
-            const arts = document.getElementById('arts').checked;
-            const sciences = document.getElementById('sciences').checked;
-            const musique = document.getElementById('musique').checked;
-            const sports = document.getElementById('sports').checked;
-            const viequotidienne = document.getElementById('viequotidienne').checked;
+            selectedFilters = [];
+            if (document.getElementById('histoire').checked) selectedFilters.push('histoire');
+            if (document.getElementById('arts').checked) selectedFilters.push('arts');
+            if (document.getElementById('sciences').checked) selectedFilters.push('sciences');
+            if (document.getElementById('musique').checked) selectedFilters.push('musique');
+            if (document.getElementById('sports').checked) selectedFilters.push('sports');
+            if (document.getElementById('viequotidienne').checked) selectedFilters.push('viequotidienne');
 
-            console.log(`Histoire: ${histoire}, Arts: ${arts}, Sciences: ${sciences}, Musique: ${musique}, Sports: ${sports}, Vie Quotidienne: ${viequotidienne}`);
-            hideFilters(); // Masquer la bulle après avoir enregistré les filtres
+            hideFilters();
+            displayRandomQuote();
         }
     </script>
 </body>
