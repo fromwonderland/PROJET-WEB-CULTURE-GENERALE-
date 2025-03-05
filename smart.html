@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartyCat - Smart</title>
+    <link rel="icon" href="catread.png" type="image/png">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #38B6FF; /* Couleur de fond */
+            font-family: Arial, sans-serif;
+            overflow-y: scroll; /* Ajoute une barre de défilement verticale */
+            transition: background-color 0.5s ease-in-out;
+        }
+
+        .container {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .top-buttons {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .top-buttons img {
+            width: auto;
+            height: 65px; /* Hauteur fixe pour tous les boutons */
+            margin-left: 10px;
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+        }
+
+        .top-buttons img:hover {
+            transform: scale(1.1);
+        }
+
+        .left-buttons {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .left-buttons img {
+            width: auto;
+            height: 70px; /* Hauteur fixe pour tous les boutons */
+            margin-right: 10px;
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+        }
+
+        .left-buttons img:hover {
+            transform: scale(1.1);
+        }
+
+        .center-content {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .ticket-image {
+            width: 400px; /* Deux fois plus grande que le bouton apres.png */
+            height: auto;
+            margin: 150px 0;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .ticket-image:hover {
+            transform: scale(1.1);
+        }
+
+        .apres-button, .avant-button, .jepasse-button {
+            width: auto;
+            height: 60px; /* Hauteur fixe pour les boutons */
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .avant-button {
+            left: -100px; /* Position à gauche de l'image */
+        }
+
+        .apres-button {
+            right: -100px; /* Position à droite de l'image */
+        }
+
+        .jepasse-button {
+            right: -200px; /* Position à droite de l'image */
+        }
+
+        .apres-button:hover, .avant-button:hover, .jepasse-button:hover {
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .confirmation-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(56, 182, 255, 0.8); /* Fond semi-transparent */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .confirmation-content {
+            text-align: center;
+        }
+
+        .confirmation-content img {
+            width: auto;
+            height: 450px; /* Hauteur fixe pour l'image deconnexionquestion.png */
+            margin-bottom: 20px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .confirmation-content img:hover {
+            transform: scale(1.1);
+        }
+
+        .confirmation-buttons {
+            display: flex;
+            justify-content: center;
+        }
+
+        .confirmation-buttons img {
+            width: auto;
+            height: 50px; /* Hauteur fixe pour les boutons */
+            margin: 0 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .confirmation-buttons img:hover {
+            transform: scale(1.1);
+        }
+
+        .tooltip.light-mode {
+            position: absolute;
+            top: 70px; /* Positionne la bulle sous le bouton */
+            right: 20px; /* Aligne la bulle avec le bouton */
+            display: none;
+            background-color: #38B6FF; /* Même couleur de fond que le reste de la page en mode clair */
+            border: 2px solid #ab69c6; /* Cadre de couleur #ab69c6 */
+            border-radius: 10px; /* Angles arrondis */
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            margin: 2px; /* Espacement de 2px autour de la bulle */
+        }
+
+        .tooltip.light-mode img {
+            width: 50px;
+            height: 50px;
+            margin: 5px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .tooltip.light-mode img:hover {
+            transform: scale(1.1);
+        }
+
+        .tooltip-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 5 images par ligne */
+            gap: 10px;
+        }
+
+        .welcome-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(56, 182, 255, 0.8); /* Fond semi-transparent */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1002;
+        }
+
+        .welcome-overlay img {
+            width: auto;
+            height: 450px; /* Hauteur fixe pour l'image bienvenue.png */
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .welcome-overlay img:hover {
+            transform: scale(1.1);
+        }
+
+        .moon-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: auto;
+            height: 50px;
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+        }
+
+        .moon-button img {
+            width: auto;
+            height: 50px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .moon-button img:hover {
+            transform: scale(1.1);
+        }
+
+        /* Styles pour la nouvelle bulle de filtres */
+        .filters-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(56, 182, 255, 0.8); /* Fond flouté */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            display: none;
+        }
+
+        .filters-content {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 400px;
+            width: 100%;
+            text-align: left;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .filters-content img {
+            cursor: pointer;
+            width: auto;
+            height: 50px;
+        }
+
+        .filters-content .filter-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .filters-content .filter-option input {
+            margin-right: 10px;
+        }
+
+        .filters-content img.enregistrer {
+            width: auto;
+            height: 50px;
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+            display: block; /* Ajouté pour centrer l'image */
+            margin: 20px auto 0 auto; /* Centre l'image horizontalement et ajuste la marge */
+        }
+
+        .filters-content img.enregistrer:hover {
+            transform: scale(1.1);
+        }
+
+        #quoteContainer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5em;
+            color: black;
+            background: none;
+            z-index: 1003;
+            white-space: pre-wrap;
+            text-align: center;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .answer-input {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 30px;
+            text-align: center;
+            border-radius: 10px; /* Angles arrondis */
+        }
+
+        .answer-buttons {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+        }
+
+        .answer-buttons img {
+            width: auto;
+            height: 60px;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .answer-buttons img:hover {
+            transform: scale(1.1);
+        }
+
+        .feedback-image {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: auto;
+            height: 120px;
+            border-radius: 10px; /* Angles arrondis */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="top-buttons">
+            <img id="progressionButton" src="progression.png" alt="Progression" onclick="progressionFunction()">
+            <img id="tropheeButton" src="trophee.png" alt="Trophée" onclick="tropheeFunction()">
+            <img id="aideButton" src="aide.png" alt="Aide" onclick="openAide()">
+            <img id="musiqueButton" src="musique.png" alt="Musique" onclick="toggleMusic()">
+            <img id="deconnexionButton" class="deconnexion-button" src="deconnexion.png" alt="Déconnexion" onclick="showConfirmation()">
+        </div>
+
+        <div class="left-buttons">
+            <img id="apprendreButton" src="apprendre.png" alt="Apprendre" onclick="apprendreFunction()">
+            <img id="mentrainerButton" src="mentrainer.png" alt="M'entraîner" onclick="mentrainerFunction()">
+            <img id="filtresButton" src="filtres.png" alt="Filtres" onclick="showFilters()">
+        </div>
+
+        <div class="center-content">
+            <div id="quoteContainer"></div>
+            <img id="avantButton" class="avant-button hidden" src="avant.png" alt="Avant" onclick="previousQuestion()">
+            <img id="ticketImage" class="ticket-image" src="ticket1.png" alt="Ticket">
+            <img id="apresButton" class="apres-button hidden" src="apres.png" alt="Après" onclick="nextQuestion()">
+            <img id="jepasseButton" class="jepasse-button hidden" src="jepasse.png" alt="Jepasse" onclick="nextQuestion()">
+        </div>
+
+        <input type="text" class="answer-input hidden" id="answerInput" placeholder="Entrez votre réponse" maxlength="30">
+
+        <div class="answer-buttons hidden" id="answerButtons">
+            <img src="vrai.png" alt="Vrai" onclick="checkAnswer(true)" class="hidden">
+            <img src="faux.png" alt="Faux" onclick="checkAnswer(false)" class="hidden">
+        </div>
+
+        <img id="feedbackImage" class="feedback-image hidden" src="" alt="Feedback">
+    </div>
+
+    <div id="confirmationOverlay" class="confirmation-overlay">
+        <div class="confirmation-content">
+            <img src="deconnexionquestion.png" alt="Déconnexion Question">
+            <div class="confirmation-buttons">
+                <img src="oui.png" alt="Oui" onclick="confirmDeconnexion()">
+                <img src="non.png" alt="Non" onclick="hideConfirmation()">
+            </div>
+        </div>
+    </div>
+
+    <div id="tooltip" class="tooltip light-mode">
+        <div class="tooltip-grid">
+            <img src="trophee1.png" alt="Trophée 1">
+            <img src="trophee2.png" alt="Trophée 2">
+            <img src="trophee3.png" alt="Trophée 3">
+            <img src="trophee4.png" alt="Trophée 4">
+            <img src="trophee5.png" alt="Trophée 5">
+            <img src="trophee6.png" alt="Trophée 6">
+            <img src="trophee7.png" alt="Trophée 7">
+            <img src="trophee8.png" alt="Trophée 8">
+            <img src="trophee9.png" alt="Trophée 9">
+            <img src="trophee10.png" alt="Trophée 10">
+        </div>
+    </div>
+
+    <div id="welcomeOverlay" class="welcome-overlay">
+        <img src="bienvenue.png" alt="Bienvenue">
+    </div>
+
+    <div class="moon-button" onclick="toggleDarkMode()">
+        <img src="moon.png" alt="Mode Nuit">
+    </div>
+
+    <audio id="backgroundMusic" loop>
+        <source src="guitare.mp3" type="audio/mpeg">
+        Votre navigateur ne supporte pas l'élément audio.
+    </audio>
+
+    <div id="filtersOverlay" class="filters-overlay">
+        <div class="filters-content">
+            <img src="retour.png" alt="Retour" onclick="hideFilters()" style="position: absolute; top: 10px; right: 10px;">
+            <h3>Sélectionnez vos thèmes</h3>
+            <div class="filter-option">
+                <input type="checkbox" id="histoire" checked>
+                <label for="histoire">Histoire & Géographie 🌍</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="arts">
+                <label for="arts">Arts & Littérature 🎭</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="sciences">
+                <label for="sciences">Sciences & Technologie 🔬</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="musique">
+                <label for="musique">Musique & Culture Pop 🎵</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="sports">
+                <label for="sports">Sports & Records ⚽</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="viequotidienne">
+                <label for="viequotidienne">Vie quotidienne & Insolite 🍔</label>
+            </div>
+            <img class="enregistrer" src="enregistrer.png" alt="Enregistrer" onclick="saveFilters()">
+        </div>
+    </div>
+
+<script>
+    let currentTicketIndex = 0;
+    let isTrainingMode = false;
+    let questionsData = {};
+    let selectedFilters = ['histoire']; // "Histoire & Géographie" est sélectionné par défaut
+    let currentQuestions = [];
+    let currentQuestion = null;
+    let usedQuestions = [];
+
+    function openAide() {
+        window.open('aide.html', '_blank');
+    }
+
+    const ticketImages = [
+        'ticket1.png',
+        'ticket2.png',
+        'ticket3.png',
+        'ticket4.png',
+        'ticket5.png',
+        'ticket6.png',
+        'ticket7.png',
+        'ticket8.png',
+        'ticket9.png',
+        'ticket10.png',
+        'ticket11.png',
+        'ticket12.png',
+        'ticket13.png',
+        'ticket14.png'
+    ];
+
+    async function loadQuotes() {
+        try {
+            const response = await fetch('quotes.json');
+            quotesData = await response.json();
+            displayRandomQuote();
+        } catch (error) {
+            console.error('Erreur lors du chargement des quotes:', error);
+        }
+    }
+
+    async function loadQuestions() {
+        try {
+            const response = await fetch('questions.json');
+            questionsData = await response.json();
+            filterQuestions();
+        } catch (error) {
+            console.error('Erreur lors du chargement des questions:', error);
+        }
+    }
+
+    function displayRandomQuote() {
+        const quoteContainer = document.getElementById('quoteContainer');
+        if (!quotesData || !quotesData.quotes) {
+            quoteContainer.textContent = "Erreur de chargement des citations.";
+            return;
+        }
+
+        let availableQuotes = [];
+        selectedFilters.forEach(filter => {
+            if (quotesData.quotes[filter]) {
+                availableQuotes = availableQuotes.concat(quotesData.quotes[filter]);
+            }
+        });
+
+        if (availableQuotes.length > 0) {
+            const randomQuote = availableQuotes[Math.floor(Math.random() * availableQuotes.length)];
+            quoteContainer.textContent = randomQuote;
+        } else {
+            quoteContainer.textContent = "Aucune citation disponible pour les filtres sélectionnés.";
+        }
+    }
+
+    function nextTicket() {
+        currentTicketIndex = (currentTicketIndex + 1) % ticketImages.length;
+        updateTicketImage();
+        displayRandomQuote();
+    }
+
+    function previousTicket() {
+        if (currentTicketIndex > 0) {
+            currentTicketIndex = (currentTicketIndex - 1) % ticketImages.length;
+        } else {
+            currentTicketIndex = ticketImages.length - 1;
+        }
+        updateTicketImage();
+        displayRandomQuote();
+    }
+
+    function updateTicketImage() {
+        const ticketImage = document.getElementById('ticketImage');
+        ticketImage.src = ticketImages[currentTicketIndex];
+    }
+
+    // Fonction pour afficher l'overlay de confirmation (déconnexion)
+    function showConfirmation() {
+        const overlay = document.getElementById('confirmationOverlay');
+        const quoteContainer = document.getElementById('quoteContainer');
+
+        // Masquer la citation quand l'overlay de confirmation apparaît
+        quoteContainer.style.display = 'none';
+
+        overlay.style.display = 'flex';
+        setTimeout(() => {
+            overlay.style.opacity = '1';
+        }, 10);
+    }
+
+    // Fonction pour masquer l'overlay de confirmation (déconnexion)
+    function hideConfirmation() {
+        const overlay = document.getElementById('confirmationOverlay');
+        const quoteContainer = document.getElementById('quoteContainer');
+
+        overlay.style.opacity = '0';
+        setTimeout(() => {
+            overlay.style.display = 'none';
+            // Réafficher la citation après la fermeture de l'overlay
+            quoteContainer.style.display = 'block';
+        }, 500);
+    }
+
+    function confirmDeconnexion() {
+        window.location.href = 'index.html';
+    }
+
+    function mentrainerFunction() {
+        isTrainingMode = true;
+        loadQuestions();
+        document.getElementById('avantButton').style.display = 'none';
+        document.getElementById('apresButton').style.display = 'none';
+        document.getElementById('jepasseButton').style.display = 'block';
+    }
+
+    function apprendreFunction() {
+        isTrainingMode = false;
+        document.getElementById('avantButton').style.display = 'block';
+        document.getElementById('apresButton').style.display = 'block';
+        document.getElementById('jepasseButton').style.display = 'none';
+        document.getElementById('answerButtons').classList.add('hidden');
+        document.getElementById('answerInput').classList.add('hidden');
+        displayRandomQuote();
+    }
+
+    function tropheeFunction() {
+        alert("Fonctionnalité 'Trophée' à définir.");
+    }
+
+    function progressionFunction() {
+        alert("Fonctionnalité 'Progression' à définir.");
+    }
+
+    const tropheeButton = document.getElementById('tropheeButton');
+    const tooltip = document.getElementById('tooltip');
+
+    function showTooltip() {
+        tooltip.style.display = 'block';
+    }
+
+    function hideTooltip() {
+        tooltip.style.display = 'none';
+    }
+
+    tropheeButton.addEventListener('mouseenter', showTooltip);
+    tropheeButton.addEventListener('mouseleave', hideTooltip);
+    tooltip.addEventListener('mouseenter', showTooltip);
+    tooltip.addEventListener('mouseleave', hideTooltip);
+
+    const welcomeOverlay = document.getElementById('welcomeOverlay');
+    const quoteContainer = document.getElementById('quoteContainer');
+
+    window.addEventListener('load', () => {
+        welcomeOverlay.style.display = 'flex';
+        quoteContainer.classList.add('hidden');
+        loadQuotes();
+        apprendreFunction(); // Démarrer en mode apprentissage
+    });
+
+    window.addEventListener('click', () => {
+        welcomeOverlay.style.display = 'none';
+        quoteContainer.classList.remove('hidden');
+    });
+
+    function toggleDarkMode() {
+        const body = document.body;
+        const images = document.querySelectorAll('img:not(.tooltip img)');
+        if (body.classList.contains('dark-mode')) {
+            body.classList.remove('dark-mode');
+            body.style.backgroundColor = '#38B6FF';
+            images.forEach(img => {
+                img.src = img.src.replace('moon', '');
+            });
+            ticketImages.forEach((ticket, index) => {
+                ticketImages[index] = ticket.replace('moon', '');
+            });
+            updateTicketImage();
+        } else {
+            body.classList.add('dark-mode');
+            body.style.backgroundColor = '#060035';
+            images.forEach(img => {
+                img.src = img.src.replace('.png', 'moon.png');
+            });
+            ticketImages.forEach((ticket, index) => {
+                ticketImages[index] = ticket.replace('.png', 'moon.png');
+            });
+            updateTicketImage();
+        }
+    }
+
+    function showFilters() {
+        const filtersOverlay = document.getElementById('filtersOverlay');
+        filtersOverlay.style.display = 'flex';
+    }
+
+    function hideFilters() {
+        const filtersOverlay = document.getElementById('filtersOverlay');
+        filtersOverlay.style.display = 'none';
+    }
+
+    function saveFilters() {
+        selectedFilters = [];
+        if (document.getElementById('histoire').checked) selectedFilters.push('histoire');
+        if (document.getElementById('arts').checked) selectedFilters.push('arts');
+        if (document.getElementById('sciences').checked) selectedFilters.push('sciences');
+        if (document.getElementById('musique').checked) selectedFilters.push('musique');
+        if (document.getElementById('sports').checked) selectedFilters.push('sports');
+        if (document.getElementById('viequotidienne').checked) selectedFilters.push('viequotidienne');
+
+        hideFilters();
+        if (isTrainingMode) {
+            filterQuestions();
+        } else {
+            displayRandomQuote();
+        }
+    }
+
+    function toggleMusic() {
+        const audio = document.getElementById('backgroundMusic');
+        if (audio.paused) {
+            audio.play();
+        } else {
+            audio.pause();
+        }
+    }
+
+    function filterQuestions() {
+        currentQuestions = [];
+        usedQuestions = [];
+        selectedFilters.forEach(filter => {
+            if (questionsData.questions[filter]) {
+                currentQuestions = currentQuestions.concat(questionsData.questions[filter]);
+            }
+        });
+        displayRandomQuestion();
+    }
+
+    function displayRandomQuestion() {
+        const quoteContainer = document.getElementById('quoteContainer');
+        const answerButtons = document.getElementById('answerButtons');
+        const answerInput = document.getElementById('answerInput');
+        const feedbackImage = document.getElementById('feedbackImage');
+        const vraiButton = document.querySelector('.answer-buttons img[alt="Vrai"]');
+        const fauxButton = document.querySelector('.answer-buttons img[alt="Faux"]');
+
+        feedbackImage.classList.add('hidden');
+
+        if (currentQuestions.length > 0) {
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * currentQuestions.length);
+                currentQuestion = currentQuestions[randomIndex];
+            } while (usedQuestions.includes(currentQuestion) && usedQuestions.length < currentQuestions.length);
+
+            usedQuestions.push(currentQuestion);
+
+            if (usedQuestions.length === currentQuestions.length) {
+                usedQuestions = []; // Réinitialiser la liste des questions utilisées
+            }
+
+            quoteContainer.textContent = currentQuestion.question;
+
+            if (isTrainingMode && currentQuestion.type === 'vrai-faux') {
+                // Affiche les boutons vrai et faux
+                answerButtons.classList.remove('hidden');
+                vraiButton.classList.remove('hidden');
+                fauxButton.classList.remove('hidden');
+                answerInput.classList.add('hidden');
+            } else {
+                // Masque les boutons vrai et faux
+                vraiButton.classList.add('hidden');
+                fauxButton.classList.add('hidden');
+                answerButtons.classList.add('hidden');
+                answerInput.classList.remove('hidden');
+            }
+
+            // Change l'image du ticket
+            currentTicketIndex = (currentTicketIndex + 1) % ticketImages.length;
+            updateTicketImage();
+        } else {
+            quoteContainer.textContent = "Aucune question disponible pour les filtres sélectionnés.";
+        }
+    }
+
+    function checkAnswer(userAnswer) {
+        const feedbackImage = document.getElementById('feedbackImage');
+        const answerButtons = document.getElementById('answerButtons');
+        const vraiButton = document.querySelector('.answer-buttons img[alt="Vrai"]');
+        const fauxButton = document.querySelector('.answer-buttons img[alt="Faux"]');
+
+        if (currentQuestion.type === 'vrai-faux') {
+            const expectedAnswer = currentQuestion.reponse === 'vrai';
+            feedbackImage.src = expectedAnswer ? (document.body.classList.contains('dark-mode') ? 'bonnereponsemoon.png' : 'bonnereponse.png') : (document.body.classList.contains('dark-mode') ? 'mauvaisereponsemoon.png' : 'mauvaisereponse.png');
+            feedbackImage.classList.remove('hidden');
+
+            // Masquer les boutons vrai et faux
+            vraiButton.classList.add('hidden');
+            fauxButton.classList.add('hidden');
+
+            setTimeout(nextQuestion, 1000);
+        }
+    }
+
+    function nextQuestion() {
+        const feedbackImage = document.getElementById('feedbackImage');
+        feedbackImage.classList.add('hidden');
+
+        if (isTrainingMode) {
+            displayRandomQuestion();
+        } else {
+            nextTicket();
+        }
+    }
+
+    function previousQuestion() {
+        if (isTrainingMode) {
+            displayRandomQuestion();
+        } else {
+            previousTicket();
+        }
+    }
+
+    document.getElementById('answerInput').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            const userAnswer = event.target.value.trim().toLowerCase();
+            const expectedAnswer = currentQuestion.reponse.trim().toLowerCase();
+            const feedbackImage = document.getElementById('feedbackImage');
+
+            feedbackImage.src = userAnswer === expectedAnswer ? (document.body.classList.contains('dark-mode') ? 'bonnereponsemoon.png' : 'bonnereponse.png') : (document.body.classList.contains('dark-mode') ? 'mauvaisereponsemoon.png' : 'mauvaisereponse.png');
+            feedbackImage.classList.remove('hidden');
+            event.target.value = '';
+            event.target.classList.add('hidden');
+            setTimeout(nextQuestion, 1000);
+        }
+    });
+</script>
+
+</body>
+</html>

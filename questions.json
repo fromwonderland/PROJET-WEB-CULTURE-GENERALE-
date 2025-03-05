@@ -1,0 +1,76 @@
+{
+  "questions": {
+    "histoire": [
+      { "type": "vrai-faux", "question": "La Révolution française a commencé en 1789.", "reponse": "vrai" },
+      { "type": "reponse", "question": "En quelle année Napoléon Bonaparte a-t-il été couronné empereur ?", "reponse": "1804" },
+      { "type": "vrai-faux", "question": "La Première Guerre mondiale a débuté en 1914.", "reponse": "vrai" },
+      { "type": "reponse", "question": "En quelle année le Mur de Berlin est-il tombé ?", "reponse": "1989" },
+      { "type": "vrai-faux", "question": "La Déclaration des droits de l'homme et du citoyen a été adoptée en 1789.", "reponse": "vrai" },
+      { "type": "reponse", "question": "Quand a eu lieu la bataille de Waterloo ?", "reponse": "1815" },
+      { "type": "vrai-faux", "question": "La Guerre froide a duré de 1947 à 1991.", "reponse": "vrai" },
+      { "type": "reponse", "question": "En quelle année a été signé le Traité de Versailles ?", "reponse": "1919" },
+      { "type": "vrai-faux", "question": "La Révolution industrielle a commencé au XVIIIe siècle.", "reponse": "vrai" },
+      { "type": "reponse", "question": "En quelle année a eu lieu la chute de l'Empire romain d'Occident ?", "reponse": "476" }
+    ],
+    "arts": [
+      { "type": "vrai-faux", "question": "Leonardo da Vinci a peint la Mona Lisa.", "reponse": "vrai" },
+      { "type": "reponse", "question": "Qui a peint La Nuit étoilée ?", "reponse": "Vincent van Gogh" },
+      { "type": "vrai-faux", "question": "Pablo Picasso est connu pour le cubisme.", "reponse": "vrai" },
+      { "type": "reponse", "question": "Qui a peint le plafond de la Chapelle Sixtine ?", "reponse": "Michel-Ange" },
+      { "type": "vrai-faux", "question": "Shakespeare a écrit Hamlet.", "reponse": "vrai" },
+      { "type": "reponse", "question": "Qui a composé la Symphonie n°9 ?", "reponse": "Beethoven" },
+      { "type": "vrai-faux", "question": "Le David de Michel-Ange est une célèbre sculpture.", "reponse": "vrai" },
+      { "type": "reponse", "question": "Qui a composé Une petite musique de nuit ?", "reponse": "Mozart" },
+      { "type": "vrai-faux", "question": "Le Guernica de Picasso dénonce les horreurs de la guerre.", "reponse": "vrai" },
+      { "type": "reponse", "question": "Où est exposée La Joconde ?", "reponse": "Musée du Louvre" }
+    ],
+    "sciences": [
+      { "type": "vrai-faux", "question": "Isaac Newton a découvert la loi de la gravitation universelle.", "reponse": "vrai" },
+      { "type": "reponse", "question": "Qui a formulé la théorie de la relativité ?", "reponse": "Albert Einstein" },
+      { "type": "vrai-faux", "question": "Galilée a amélioré le télescope.", "reponse": "vrai" },
+      { "type": "reponse", "question": "Quels éléments Marie Curie a-t-elle découverts ?", "reponse": "radium et polonium" },
+      { "type": "vrai-faux", "question": "Charles Darwin a proposé la théorie de l'évolution.", "reponse": "vrai" },
+      { "type": "reponse", "question": "Qui a découvert le processus de pasteurisation ?", "reponse": "Louis Pasteur" },
+      { "type": "vrai-faux", "question": "Nikola Tesla a contribué au développement de l'électricité.", "reponse": "vrai" },
+      { "type": "reponse", "question": "Qui a découvert la structure de l'ADN ?", "reponse": "Watson et Crick" },
+      { "type": "vrai-faux", "question": "Le premier satellite artificiel, Spoutnik, a été lancé en 1957.", "reponse": "vrai" },
+      { "type": "reponse", "question": "Qui était le premier homme sur la Lune ?", "reponse": "Neil Armstrong" }
+    ],
+    "musique": [
+      { "type": "vrai-faux", "question": "Les Beatles sont un groupe de rock britannique emblématique.", "reponse": "vrai" },
+      { "type": "reponse", "question": "Qui est connu comme le roi de la pop ?", "reponse": "Michael Jackson" },
+      { "type": "vrai-faux", "question": "Elvis Presley est une icône du rock'n'roll.", "reponse": "vrai" },
+      { "type": "reponse", "question": "Qui était le chanteur principal de Queen ?", "reponse": "Freddie Mercury" },
+      { "type": "vrai-faux", "question": "Bob Marley est une légende du reggae.", "reponse": "vrai" },
+      { "type": "reponse", "question": "Qui est connue comme la reine de la pop ?", "reponse": "Madonna" },
+      { "type": "vrai-faux", "question": "Le jazz est né à La Nouvelle-Orléans.", "reponse": "vrai" },
+      { "type": "reponse", "question": "En quelle année le festival de Woodstock a-t-il eu lieu ?", "reponse": "1969" },
+      { "type": "vrai-faux", "question": "Beyoncé est une artiste pop influente.", "reponse": "vrai" },
+      { "type": "reponse", "question": "Quand le heavy metal est-il apparu ?", "reponse": "années 1970" }
+    ],
+    "sports": [
+      { "type": "vrai-faux", "question": "Le football est le sport le plus populaire au monde.", "reponse": "vrai" },
+      { "type": "reponse", "question": "En quelle année les Jeux olympiques modernes ont-ils commencé ?", "reponse": "1896" },
+      { "type": "vrai-faux", "question": "Michael Jordan est une légende du basketball.", "reponse": "vrai" },
+      { "type": "reponse", "question": "Qui est le sprinter le plus rapide de l'histoire ?", "reponse": "Usain Bolt" },
+      { "type": "vrai-faux", "question": "Le Tour de France est une célèbre course cycliste.", "reponse": "vrai" },
+      { "type": "reponse", "question": "Quel est un sport de raquette populaire ?", "reponse": "tennis" },
+      { "type": "vrai-faux", "question": "Le rugby est un sport d'équipe physique.", "reponse": "vrai" },
+      { "type": "reponse", "question": "Quel sport est populaire aux États-Unis ?", "reponse": "baseball" },
+      { "type": "vrai-faux", "question": "Le cricket est populaire en Inde et au Royaume-Uni.", "reponse": "vrai" },
+      { "type": "reponse", "question": "Quelle est une compétition de course automobile ?", "reponse": "Formule 1" }
+    ],
+    "viequotidienne": [
+      { "type": "vrai-faux", "question": "Le café est l'une des boissons les plus consommées au monde.", "reponse": "vrai" },
+      { "type": "reponse", "question": "À partir de quoi le chocolat est-il fabriqué ?", "reponse": "fèves de cacao"},
+      { "type": "vrai-faux", "question": "Le pain est un aliment de base dans de nombreuses cultures.", "reponse": "vrai" },
+      { "type": "reponse", "question": "Quel est l'aliment de base en Asie ?", "reponse": "riz" },
+      { "type": "vrai-faux", "question": "Le fromage est fabriqué à partir de lait caillé.", "reponse": "vrai" },
+      { "type": "reponse", "question": "À partir de quoi le vin est-il fabriqué ?", "reponse": "raisins" },
+      { "type": "vrai-faux", "question": "La pizza est un plat italien populaire.", "reponse": "vrai" },
+      { "type": "reponse", "question": "Quel est un plat japonais à base de riz et de poisson cru ?", "reponse": "sushi" },
+      { "type": "vrai-faux", "question": "Le hamburger est un plat américain populaire.", "reponse": "vrai" },
+      { "type": "reponse", "question": "Quelle boisson est populaire en Asie ?", "reponse": "thé" }
+    ]
+  }
+}
